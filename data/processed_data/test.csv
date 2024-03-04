@@ -1,4 +1,4 @@
-PassengerId,Fare,Age*Class,Family_size,Fare_by_person,Sex_female,Sex_male,Cabin_A,Cabin_B,Cabin_C,Cabin_D,Cabin_E,Cabin_F,Cabin_G,Cabin_X,Embarked_C,Embarked_Q,Embarked_S,Cabin_T
+PassengerId,Fare,Age*Class,Family_size,Fare_by_person,Sex_female,Sex_male,Cabin_A,Cabin_B,Cabin_C,Cabin_D,Cabin_E,Cabin_F,Cabin_G,Cabin_T,Cabin_X,Embarked_C,Embarked_Q,Embarked_S
 892,7.8292,103.5,1,7.8292,False,True,False,False,False,False,False,False,False,True,False,True,False,0
 893,7.0,141.0,2,3.5,True,False,False,False,False,False,False,False,False,True,False,False,True,0
 894,9.6875,124.0,1,9.6875,False,True,False,False,False,False,False,False,False,True,False,True,False,0
