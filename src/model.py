@@ -5,6 +5,10 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import GridSearchCV
 
+# Rich library for better print
+from rich.progress import Progress, TextColumn, SpinnerColumn
+from rich import print as pprint
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Model selection for Titanic competition')
@@ -32,13 +36,18 @@ def load_data():
     return X_train, y_train, X_test, path_models_predictions
 
 
-def grid_search(model, parameters, model_name=""):   
-    # Grid Search to found the best hyperparameters
-    rdf_clf = GridSearchCV(estimator=model, param_grid=parameters) # model grid search
-    rdf_clf.fit(X_train, y_train)
+def grid_search(model, parameters, model_name=""):
+    spinner_column = SpinnerColumn(finished_text="Grid Search done!")
+    text_column = TextColumn(f"[bold cyan]Grid Search for {model_name}[/bold cyan]...")
+    progress = Progress(spinner_column, text_column, transient=True)
+    with progress:
+        task = progress.add_task("")
+        # Grid Search to found the best hyperparameters
+        rdf_clf = GridSearchCV(estimator=model, param_grid=parameters) # model grid search
+        rdf_clf.fit(X_train, y_train)
 
     # Grid Search Results
-    print(f"{model_name} Model Metrics:")
+    pprint(f"[bold cyan]{model_name} Model Metrics[/bold cyan]")
     print("Best parameters:", rdf_clf.best_params_)
     print("Best score:", rdf_clf.best_score_)
 
