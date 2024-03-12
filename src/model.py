@@ -20,6 +20,19 @@ def load_data():
     return X_train, y_train, X_test, path_models_predictions
 
 
+def grid_search(model, parameters, model_name=""):   
+    # Grid Search to found the best hyperparameters
+    rdf_clf = GridSearchCV(estimator=model, param_grid=parameters) # model grid search
+    rdf_clf.fit(X_train, y_train)
+
+    # Grid Search Results
+    print(f"{model_name} Model Metrics:")
+    print("Best parameters:", rdf_clf.best_params_)
+    print("Best score:", rdf_clf.best_score_)
+
+    return rdf_clf.best_estimator_
+
+
 if __name__ == "__main__":
     # Load data
     X_train, y_train, X_test, path_models_predictions = load_data()
@@ -27,18 +40,9 @@ if __name__ == "__main__":
     # Random Forest Model
     rdf_model = RandomForestClassifier(random_state=42)
     
-    # Grid Search to found the best hyperparameters
-    parameters = {'n_estimators':[10, 50, 100, 500], 'max_depth':[5, 10, 20]}
-    rdf_clf = GridSearchCV(estimator=rdf_model, param_grid=parameters) # radom forest classifier grid search
-    rdf_clf.fit(X_train, y_train)
-
-    # Grid Search Results
-    print("Random Forest Model Metrics:")
-    print("Best parameters:", rdf_clf.best_params_)
-    print("Best score:", rdf_clf.best_score_)
-    
-    # load the best model
-    rdf_model = rdf_clf.best_estimator_
+    # Grid Search 
+    parameters = {'n_estimators':[10, 50, 100, 500], 'max_depth':[5, 10, 20]} # hyperparameters to test
+    rdf_model = grid_search(rdf_model, parameters, "Random Forest") 
     y_test = rdf_model.predict(X_test)
 
     rdf_y_test = pd.DataFrame({"PassengerId":X_test["PassengerId"], "Survived":y_test})
