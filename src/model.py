@@ -32,6 +32,14 @@ def grid_search(model, parameters, model_name=""):
 
     return rdf_clf.best_estimator_
 
+def predict_and_save(model, X_test, path_models_predictions, model_name=""):
+    y_test = model.predict(X_test)
+    y_test = pd.DataFrame({"PassengerId":X_test["PassengerId"], "Survived":y_test})
+    y_test.to_csv(path_models_predictions + model_name + "_prediction.csv", index=False) 
+
+    return y_test
+
+
 
 if __name__ == "__main__":
     # Load data
@@ -43,10 +51,7 @@ if __name__ == "__main__":
     # Grid Search 
     parameters = {'n_estimators':[10, 50, 100, 500], 'max_depth':[5, 10, 20]} # hyperparameters to test
     rdf_model = grid_search(rdf_model, parameters, "Random Forest") 
-    y_test = rdf_model.predict(X_test)
-
-    rdf_y_test = pd.DataFrame({"PassengerId":X_test["PassengerId"], "Survived":y_test})
-    rdf_y_test.to_csv(path_models_predictions + "RF_prediction.csv", index=False) 
+    y_test = predict_and_save(rdf_model, X_test, path_models_predictions, "RandomForest")
 
     # Random Forest feature importances
     feature_importances = rdf_model.feature_importances_
