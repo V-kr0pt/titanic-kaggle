@@ -14,7 +14,12 @@ def load_data():
     train_data = pd.read_csv(path_processed_data + "train.csv")
     X_test = pd.read_csv(path_processed_data + "test.csv")
 
-    X_train = train_data.drop("Survived", axis=1)
+    # We'll drop the "PassengerId" column, because it's not a feature
+    X_train = train_data.drop("PassengerId", axis=1)
+    #X_test = test_data.drop("PassengerId", axis=1)
+
+    # Remove the target variable from the features
+    X_train = X_train.drop("Survived", axis=1)
     y_train = train_data["Survived"]
 
     return X_train, y_train, X_test, path_models_predictions
@@ -33,8 +38,13 @@ def grid_search(model, parameters, model_name=""):
     return rdf_clf.best_estimator_
 
 def predict_and_save(model, X_test, path_models_predictions, model_name=""):
+    
+    # remove the "PassengerId" column
+    passenger_id = X_test["PassengerId"]
+    X_test = X_test.drop("PassengerId", axis=1)
+    
     y_test = model.predict(X_test)
-    y_test = pd.DataFrame({"PassengerId":X_test["PassengerId"], "Survived":y_test})
+    y_test = pd.DataFrame({"PassengerId":passenger_id, "Survived":y_test})
     y_test.to_csv(path_models_predictions + model_name + "_prediction.csv", index=False) 
 
     return y_test
@@ -45,19 +55,25 @@ if __name__ == "__main__":
     # Load data
     X_train, y_train, X_test, path_models_predictions = load_data()
  
-    # Random Forest Model
+    # ============= Random Forest Model =============
+    # Defining the Model
     rdf_model = RandomForestClassifier(random_state=42)
     
     # Grid Search 
     parameters = {'n_estimators':[10, 50, 100, 500], 'max_depth':[5, 10, 20]} # hyperparameters to test
     rdf_model = grid_search(rdf_model, parameters, "Random Forest") 
+
+    # Do predictions and save the results
     y_test = predict_and_save(rdf_model, X_test, path_models_predictions, "RandomForest")
 
     # Random Forest feature importances
     feature_importances = rdf_model.feature_importances_
+    feature_importances = pd.DataFrame({"Feature":X_train.columns, "Importance":feature_importances})
+    feature_importances = feature_importances.sort_values(by="Importance", ascending=False)
+    print("Random Forest Feature Importances:")
+    print(feature_importances)
 
-    #rdf_model.fit(train_data.drop("Survived", axis=1), train_data["Survived"])
-
+   
 
 
     
