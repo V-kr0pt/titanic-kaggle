@@ -73,8 +73,14 @@ if __name__ == "__main__":
     print("Random Forest Feature Importances:")
     print(feature_importances)
 
-   
+    # ============= Support Vector Machine Model =============
+    # Defining the Model
+    svm_model = SVC()
 
+    # Grid search
+    parameters = {'C': [0.5, 1, 2], 'kernel': ['linear', 'poly', 'rbf', 'sigmoid']}
+    svm_model = grid_search(svm_model, parameters, "SVM")
 
-    
+    # Do predictions and save the results
+    y_test = predict_and_save(svm_model, X_test, path_models_predictions, "SVM")   
     
