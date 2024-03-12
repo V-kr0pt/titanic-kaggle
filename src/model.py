@@ -1,9 +1,16 @@
+import argparse
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import GridSearchCV
 
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='Model selection for Titanic competition')
+    parser.add_argument('--model', type=str, default='random_forest', choices=['rf', 'svm', 'knn'],
+                        help='Model to use for predictions')
+    return parser.parse_args()
 
 def load_data():
     # Load data
@@ -52,35 +59,52 @@ def predict_and_save(model, X_test, path_models_predictions, model_name=""):
 
 
 if __name__ == "__main__":
+    args = parse_args()
+        
     # Load data
     X_train, y_train, X_test, path_models_predictions = load_data()
  
-    # ============= Random Forest Model =============
-    # Defining the Model
-    rdf_model = RandomForestClassifier(random_state=42)
     
-    # Grid Search 
-    parameters = {'n_estimators':[10, 50, 100, 500], 'max_depth':[5, 10, 20]} # hyperparameters to test
-    rdf_model = grid_search(rdf_model, parameters, "Random Forest") 
+    if args.model == "rf":
+        # ============= Random Forest Model =============
+        # Defining the Model
+        rdf_model = RandomForestClassifier(random_state=42)
 
-    # Do predictions and save the results
-    y_test = predict_and_save(rdf_model, X_test, path_models_predictions, "RandomForest")
+        # Grid Search 
+        parameters = {'n_estimators':[10, 50, 100, 500], 'max_depth':[5, 10, 20]} # hyperparameters to test
+        rdf_model = grid_search(rdf_model, parameters, "Random Forest") 
 
-    # Random Forest feature importances
-    feature_importances = rdf_model.feature_importances_
-    feature_importances = pd.DataFrame({"Feature":X_train.columns, "Importance":feature_importances})
-    feature_importances = feature_importances.sort_values(by="Importance", ascending=False)
-    print("Random Forest Feature Importances:")
-    print(feature_importances)
+        # Do predictions and save the results
+        y_test = predict_and_save(rdf_model, X_test, path_models_predictions, "RandomForest")
+
+        # Random Forest feature importances
+        feature_importances = rdf_model.feature_importances_
+        feature_importances = pd.DataFrame({"Feature":X_train.columns, "Importance":feature_importances})
+        feature_importances = feature_importances.sort_values(by="Importance", ascending=False)
+        print("Random Forest Feature Importances:")
+        print(feature_importances)
 
     # ============= Support Vector Machine Model =============
-    # Defining the Model
-    svm_model = SVC()
+    if args.model == "svm": 
+        # Defining the Model
+        svm_model = SVC()
 
-    # Grid search
-    parameters = {'C': [0.5, 1, 2], 'kernel': ['linear', 'poly', 'rbf', 'sigmoid']}
-    svm_model = grid_search(svm_model, parameters, "SVM")
+        # Grid search
+        parameters = {'C': [0.5, 1, 2], 'kernel': ['linear', 'poly', 'rbf', 'sigmoid']}
+        svm_model = grid_search(svm_model, parameters, "SVM")
 
-    # Do predictions and save the results
-    y_test = predict_and_save(svm_model, X_test, path_models_predictions, "SVM")   
+        # Do predictions and save the results
+        y_test = predict_and_save(svm_model, X_test, path_models_predictions, "SVM")   
+
+    # ============= K-Nearest Neighbors Model =============
+    if args.model == "knn":
+        # Defining the Model
+        knn_model = KNeighborsClassifier()
+
+        # Grid search
+        parameters = {'n_neighbors': [3, 5, 7, 10, 20, 50, 100], 'weights': ['uniform', 'distance']}
+        knn_model = grid_search(knn_model, parameters, "KNN")
+
+        # Do predictions and save the results
+        y_test = predict_and_save(knn_model, X_test, path_models_predictions, "KNN")
     
