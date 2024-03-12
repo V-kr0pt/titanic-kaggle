@@ -151,7 +151,7 @@ PassengerId,Fare,Age*Class,Family_size,Fare_by_person,Sex_female,Sex_male,Cabin_
 1041,26.0,60.0,3,8.666666666666666,False,True,False,False,False,False,False,False,False,True,False,False,True,0
 1042,83.1583,23.0,2,41.57915,True,False,False,False,True,False,False,False,False,False,True,False,False,0
 1043,7.8958,90.81777108433735,1,7.8958,False,True,False,False,False,False,False,False,False,True,True,False,False,0
-1044,,181.5,1,,False,True,False,False,False,False,False,False,False,True,False,False,True,0
+1044,35.627188489208635,181.5,1,35.627188489208635,False,True,False,False,False,False,False,False,False,True,False,False,True,0
 1045,12.1833,108.0,3,4.0611,True,False,False,False,False,False,False,False,False,True,False,False,True,0
 1046,31.3875,39.0,7,4.483928571428572,False,True,False,False,False,False,False,False,False,True,False,False,True,0
 1047,7.55,72.0,1,7.55,False,True,False,False,False,False,False,False,False,True,False,False,True,0
