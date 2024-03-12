@@ -8,7 +8,7 @@ from sklearn.model_selection import GridSearchCV
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Model selection for Titanic competition')
-    parser.add_argument('--model', type=str, default='random_forest', choices=['rf', 'svm', 'knn'],
+    parser.add_argument('--model', type=str, default='random_forest', choices=['rf', 'svm', 'knn', 'all'],
                         help='Model to use for predictions')
     return parser.parse_args()
 
@@ -60,12 +60,16 @@ def predict_and_save(model, X_test, path_models_predictions, model_name=""):
 
 if __name__ == "__main__":
     args = parse_args()
-        
+
+    all_models = False
+    if args.model == "all":
+        all_models = True
+ 
     # Load data
     X_train, y_train, X_test, path_models_predictions = load_data()
  
     
-    if args.model == "rf":
+    if args.model == "rf" or all_models:
         # ============= Random Forest Model =============
         # Defining the Model
         rdf_model = RandomForestClassifier(random_state=42)
@@ -85,7 +89,7 @@ if __name__ == "__main__":
         print(feature_importances)
 
     # ============= Support Vector Machine Model =============
-    if args.model == "svm": 
+    if args.model == "svm" or all_models: 
         # Defining the Model
         svm_model = SVC()
 
@@ -97,7 +101,7 @@ if __name__ == "__main__":
         y_test = predict_and_save(svm_model, X_test, path_models_predictions, "SVM")   
 
     # ============= K-Nearest Neighbors Model =============
-    if args.model == "knn":
+    if args.model == "knn" or all_models:
         # Defining the Model
         knn_model = KNeighborsClassifier()
 
