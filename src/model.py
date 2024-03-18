@@ -8,6 +8,8 @@ from sklearn.model_selection import GridSearchCV
 # Rich library for better print
 from rich.progress import Progress, TextColumn, SpinnerColumn
 from rich import print as pprint
+from rich.table import Table
+from utils.df_to_rich_table import df_to_table
 
 
 def parse_args():
@@ -95,7 +97,11 @@ if __name__ == "__main__":
         feature_importances = pd.DataFrame({"Feature":X_train.columns, "Importance":feature_importances})
         feature_importances = feature_importances.sort_values(by="Importance", ascending=False)
         print("Random Forest Feature Importances:")
-        print(feature_importances)
+
+        # Initiate a Table instance to be modified
+        table = Table(show_header=True, header_style="bold magenta")
+        feature_importance_table = df_to_table(feature_importances, table)
+        pprint(feature_importance_table)
 
     # ============= Support Vector Machine Model =============
     if args.model == "svm" or all_models: 
