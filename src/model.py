@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import GridSearchCV
+from xgboost import XGBClassifier
 
 # Rich library for better print
 from rich.progress import Progress, TextColumn, SpinnerColumn
@@ -14,7 +15,7 @@ from utils.df_to_rich_table import df_to_table
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Model selection for Titanic competition')
-    parser.add_argument('--model', type=str, default='random_forest', choices=['rf', 'svm', 'knn', 'all'],
+    parser.add_argument('--model', type=str, default='random_forest', choices=['rf', 'svm', 'knn', 'xgboost', 'all'],
                         help='Model to use for predictions')
     return parser.parse_args()
 
@@ -126,4 +127,18 @@ if __name__ == "__main__":
 
         # Do predictions and save the results
         y_test = predict_and_save(knn_model, X_test, path_models_predictions, "KNN")
-    
+
+    # ============= XGBoost Model =============    
+    if args.model == 'xgboost' or all_models:
+        # Defining the Model
+        xgb_model = XGBClassifier()
+
+        # Grid search
+        parameters = {'max_depth': [3, 6, 10], 
+                      'gamma': [0, 0.01, 0.1],
+                      'learning_rate': [0.1, 0.01],
+                      'lambda':[0.1, 1, 10],
+                      'scale_pos_weight': [1, 3, 5],
+                      'tree_method':['exact']}
+        
+        xgb_model = grid_search(xgb_model, parameters, "XGBoost")
