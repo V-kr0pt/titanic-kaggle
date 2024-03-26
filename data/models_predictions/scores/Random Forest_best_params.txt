@@ -1,0 +1,2 @@
+Best parameters: {'max_depth': 10, 'n_estimators': 100}
+Best score: 0.8260247316552632
