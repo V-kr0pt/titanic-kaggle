@@ -38,6 +38,11 @@ def load_data():
 
     return X_train, y_train, X_test, path_models_predictions
 
+def saving_best_params(best_params, best_score, model_name, path_models_predictions):
+    path_models_scores = path_models_predictions+ "/scores/"
+    with open(path_models_scores + model_name + "_best_params.txt", "w") as file:
+        file.write(f"Best parameters: {best_params}\n")
+        file.write(f"Best score: {best_score}\n")
 
 def grid_search(model, parameters, model_name=""):
     spinner_column = SpinnerColumn(finished_text="Grid Search done!")
@@ -53,6 +58,10 @@ def grid_search(model, parameters, model_name=""):
     pprint(f"[bold cyan]{model_name} Model Metrics[/bold cyan]")
     print("Best parameters:", rdf_clf.best_params_)
     print("Best score:", rdf_clf.best_score_)
+
+    # saving the best parameters and best score in a txt file
+    saving_best_params(best_params=rdf_clf.best_params_, best_score=rdf_clf.best_score_,
+                        model_name=model_name, path_models_predictions=path_models_predictions)
 
     return rdf_clf.best_estimator_
 
