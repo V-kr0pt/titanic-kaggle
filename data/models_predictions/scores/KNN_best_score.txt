@@ -1,0 +1,3 @@
+=== 2024-03-26 ===
+Best parameters: {'n_neighbors': 50, 'weights': 'distance'}
+Best score: 0.729608938547486
