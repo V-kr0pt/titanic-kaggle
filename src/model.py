@@ -5,6 +5,7 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import GridSearchCV
 
+from datetime import date
 # Rich library for better print
 from rich.progress import Progress, TextColumn, SpinnerColumn
 from rich import print as pprint
@@ -39,7 +40,8 @@ def load_data():
 
 def saving_best_params(best_params, best_score, model_name, path_models_predictions):
     path_models_scores = path_models_predictions+ "/scores/"
-    with open(path_models_scores + model_name + "_best_params.txt", "w") as file:
+    with open(path_models_scores + model_name + "_best_score.txt", "a") as file:
+        file.write(f"=== {date.today()} ===\n")
         file.write(f"Best parameters: {best_params}\n")
         file.write(f"Best score: {best_score}\n")
 
