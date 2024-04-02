@@ -153,3 +153,6 @@ if __name__ == "__main__":
                       'tree_method':['exact']}
         
         xgb_model = grid_search(xgb_model, parameters, "XGBoost")
+
+        # Do predictions and save the results
+        y_test = predict_and_save(xgb_model, X_test, path_models_predictions, "XGBoost")
